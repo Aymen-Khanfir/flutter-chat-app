@@ -9,6 +9,22 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
+  bool _isPasswordVisible = true;
+
+  String _enteredEmail = '';
+  String _enteredPassword = '';
+
+  final _formKey = GlobalKey<FormState>();
+
+  void _submit() {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      _formKey.currentState!.save();
+      print('Email: $_enteredEmail');
+      print('Password: $_enteredPassword');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +46,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
+                      key: _formKey,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -38,14 +55,46 @@ class _AuthScreenState extends State<AuthScreen> {
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false,
                             textCapitalization: TextCapitalization.none,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty || !value.contains('@')) {
+                                return 'Please enter a valid email address.';
+                              }
+
+                              return null;
+                            },
+                            onSaved: (newValue) {
+                              _enteredEmail = newValue!;
+                            },
                           ),
                           TextFormField(
-                            decoration: const InputDecoration(labelText: 'Password'),
-                            obscureText: true,
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              suffixIcon: IconButton(
+                                icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                                alignment: Alignment.bottomCenter,
+                                color: Theme.of(context).colorScheme.primary,
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                              ),
+                            ),
+                            obscureText: _isPasswordVisible ? true : false,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty || value.trim().length < 6) {
+                                return 'Password must be at least 6 caracters long.';
+                              }
+
+                              return null;
+                            },
+                            onSaved: (newValue) {
+                              _enteredPassword = newValue!;
+                            },
                           ),
                           const SizedBox(height: 12),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _submit,
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).colorScheme.primaryContainer),
                             child: Text(_isLogin ? 'Login' : 'Signup'),
