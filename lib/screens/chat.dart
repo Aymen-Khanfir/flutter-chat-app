@@ -8,7 +8,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CHATAK'),
+        title: const Text('Welcome'),
         actions: [
           IconButton(
             onPressed: () {
