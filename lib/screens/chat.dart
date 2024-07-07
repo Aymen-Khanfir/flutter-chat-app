@@ -18,8 +18,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
     await fcm.requestPermission();
 
-    final token = await fcm.getToken();
-    print(token);
+    // This code target only one specific device
+    // final token = await fcm.getToken();
+    // print(token);
+
+    // This line of code create a chanel where all subcribe users can receive message base on a specific topic
+    fcm.subscribeToTopic('chat');
   }
 
   @override
