@@ -17,6 +17,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
   bool _isPasswordVisible = true;
+  bool _isAuthenticating = false;
 
   String _enteredEmail = '';
   String _enteredPassword = '';
@@ -35,6 +36,9 @@ class _AuthScreenState extends State<AuthScreen> {
     _formKey.currentState!.save();
 
     try {
+      setState(() {
+        _isAuthenticating = true;
+      });
       if (_isLogin) {
         final userCreadentials = await _firebase.signInWithEmailAndPassword(
           email: _enteredEmail,
@@ -61,6 +65,10 @@ class _AuthScreenState extends State<AuthScreen> {
         content: Text(e.message ?? 'Authentication Failed.'),
         dismissDirection: DismissDirection.startToEnd,
       ));
+
+      setState(() {
+        _isAuthenticating = false;
+      });
     }
   }
 
@@ -137,22 +145,25 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                           const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed: () {
-                              _submit(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primaryContainer),
-                            child: Text(_isLogin ? 'Login' : 'Signup'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(_isLogin ? 'Create an account' : 'Already have an account'),
-                          )
+                          if (_isAuthenticating) const CircularProgressIndicator(),
+                          if (!_isAuthenticating)
+                            ElevatedButton(
+                              onPressed: () {
+                                _submit(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primaryContainer),
+                              child: Text(_isLogin ? 'Login' : 'Signup'),
+                            ),
+                          if (!_isAuthenticating)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLogin = !_isLogin;
+                                });
+                              },
+                              child: Text(_isLogin ? 'Create an account' : 'Already have an account'),
+                            )
                         ],
                       ),
                     ),
