@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'package:chat_app/widgets/user_image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chat_app/widgets/user_image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -54,7 +55,11 @@ class _AuthScreenState extends State<AuthScreen> {
             FirebaseStorage.instance.ref().child('user_images').child('${userCredentials.user!.uid}.jpg');
         await storageRef.putFile(_selectedImage!);
         final imageUrl = await storageRef.getDownloadURL();
-        print(imageUrl);
+        await FirebaseFirestore.instance.collection('users').doc(userCredentials.user!.uid).set({
+          'username': 'to be done...',
+          'email': _enteredEmail,
+          'image_url': imageUrl,
+        });
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) {
