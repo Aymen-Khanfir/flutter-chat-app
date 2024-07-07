@@ -33,28 +33,30 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.indigo, Colors.deepPurple],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).secondaryHeaderColor,
+          // gradient: LinearGradient(
+          //   colors: [Colors.indigo, Colors.deepPurple],
+          //   begin: Alignment.topRight,
+          //   end: Alignment.bottomLeft,
+          // ),
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.chat,
               size: 80,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'CHATAK',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.white,
-                fontSize: 32,
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 38,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

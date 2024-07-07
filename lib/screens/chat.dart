@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
+        title: const Text('WELCOME TO CHATAK'),
         actions: [
           IconButton(
             onPressed: () {
@@ -45,8 +45,9 @@ class _ChatScreenState extends State<ChatScreen> {
             },
             icon: const Icon(Icons.exit_to_app),
             color: Theme.of(context).colorScheme.primary,
-          )
+          ),
         ],
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
       ),
       body: const Column(
         children: [
